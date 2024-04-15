@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'rest_framework',
     "phonenumber_field",
     'gamia',
+    'payment',
 ]
 
 MIDDLEWARE = [
@@ -147,3 +148,7 @@ SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME' : timedelta(days=1),
     'REFRESH_TOKEN_LIFETIME' : timedelta(days=2),
 }
+
+
+STRIPE_PUBLISHABLE_KEY = 'pk_test_51P5ro7P69QmgNv8U4yOR4PVkkz15QJY4zIfh02FtxMlkWggIQVv7eKOXurbrCEUGEFDXxt454fJpp7Fw5W804Lvv006UfAWAJJ'
+STRIPE_SECRET_KEY = 'sk_test_51P5ro7P69QmgNv8U4ZFvlGJ9t5qEzAmwtFsCR7tilDfXR0jYJRcobUgHPWUdCQCGkClOlWwO3Vx8kMTCM7tdvEWn00nAe4Goqz'
