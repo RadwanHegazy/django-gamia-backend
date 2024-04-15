@@ -11,6 +11,7 @@ class GetAllUserGamia (APIView) :
 
         data = [
             {
+                'id' : str(i.gamia.id),
                 'title' : i.gamia.title,
                 'start_at' : i.gamia.started_at,
                 'end_at' : i.gamia.started_at,
