@@ -1,5 +1,7 @@
 from django.db import models
 from uuid import uuid4
+from django.dispatch import receiver
+from django.db.models.signals import post_save
 
 class Gamia (models.Model) : 
     id = models.UUIDField(primary_key=True,editable=False,default=uuid4)
@@ -34,4 +36,16 @@ class GamiaUser (models.Model) :
     
     def __str__(self) -> str:
         return f"{self.user.full_name} | {self.gamia.title}"
-    
+
+    class Meta:
+        ordering = ('enter_at',)    
+
+
+@receiver(post_save,sender=Gamia)
+def CreateCustomGamiaUser(created, instance:Gamia,**kwargs) :
+    if created :
+        g = GamiaUser.objects.create(
+            gamia = instance,
+            user = instance.owner,
+        )
+        g.save()

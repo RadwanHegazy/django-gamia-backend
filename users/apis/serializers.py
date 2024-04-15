@@ -3,6 +3,7 @@ from ..models import User
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth.password_validation import validate_password
 
+    
 
 class RegisterSerializer(serializers.ModelSerializer) : 
     

@@ -22,6 +22,7 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('user/',include('users.apis.urls')),
     path('gamia/',include('gamia.apis.urls')),
+    path('payment/',include('payment.apis.urls')),
 ] + static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG : 
