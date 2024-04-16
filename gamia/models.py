@@ -3,13 +3,14 @@ from uuid import uuid4
 from django.dispatch import receiver
 from django.db.models.signals import post_save
 
+
 class Gamia (models.Model) : 
     id = models.UUIDField(primary_key=True,editable=False,default=uuid4)
     owner = models.ForeignKey('users.User',related_name='user_gamia_owner',on_delete=models.CASCADE)
     title = models.CharField(max_length=500,null=True,blank=True)
     current_balance = models.FloatField(default=0)
-    started_at = models.DateField(null=True)
-    end_at = models.DateField(null=True)
+    started_at = models.DateField(blank=True,null=True)
+    end_at = models.DateField(blank=True,null=True)
     max_users_count = models.PositiveIntegerField()
     price_per_user = models.FloatField()
     pay_every_days = models.PositiveIntegerField()
@@ -41,6 +42,9 @@ class GamiaUser (models.Model) :
         ordering = ('enter_at',)    
 
 
+
+
+
 @receiver(post_save,sender=Gamia)
 def CreateCustomGamiaUser(created, instance:Gamia,**kwargs) :
     if created :
@@ -49,3 +53,5 @@ def CreateCustomGamiaUser(created, instance:Gamia,**kwargs) :
             user = instance.owner,
         )
         g.save()
+
+

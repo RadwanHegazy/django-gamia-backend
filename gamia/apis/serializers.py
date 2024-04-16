@@ -1,7 +1,7 @@
 
 from rest_framework import serializers
-from gamia.models import Gamia
-
+from gamia.models import Gamia, GamiaUser
+from users.models import User
 
 class CreateGamiaSerialzier (serializers.ModelSerializer) : 
     class Meta:
@@ -19,3 +19,21 @@ class CreateGamiaSerialzier (serializers.ModelSerializer) :
         data['owner'] = self.context['user']
 
         return super().save(**data)
+
+class GamiaUserSerializer(serializers.ModelSerializer) : 
+    class Meta:
+        model = GamiaUser
+        fields = ('user','recived_money_at','hasReceived',)
+
+    @staticmethod
+    def user_details (user_id) : 
+        user = User.objects.get(id=user_id)
+        return {
+            'full_name' : user.full_name,
+            'picture' : user.picture.url,
+        }
+    
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data['user'] = self.user_details(data['user'])    
+        return data
