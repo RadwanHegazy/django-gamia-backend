@@ -13,8 +13,7 @@ class CreateGamiaSerialzier (serializers.ModelSerializer) :
         data = self.validated_data
         data['total'] = (
             self.validated_data['max_users_count'] * 
-            self.validated_data['price_per_user'] * 
-            self.validated_data['pay_every_days']
+            self.validated_data['price_per_user']
             )
         data['owner'] = self.context['user']
 
