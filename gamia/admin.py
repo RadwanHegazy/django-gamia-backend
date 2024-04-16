@@ -7,4 +7,6 @@ class GaminPanel (admin.ModelAdmin) :
 
 @admin.register(GamiaUser)
 class GaminUserPanel (admin.ModelAdmin) :
-    list_display = ('user','gamia','enter_at',)
+    list_display = ('user','gamia','recived_money_at','enter_at',)
+
+

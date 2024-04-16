@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'celery',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -42,6 +43,7 @@ INSTALLED_APPS = [
     "phonenumber_field",
     'gamia',
     'payment',
+    'reports',
 ]
 
 MIDDLEWARE = [
@@ -152,3 +154,26 @@ SIMPLE_JWT = {
 
 STRIPE_PUBLISHABLE_KEY = 'pk_test_51P5ro7P69QmgNv8U4yOR4PVkkz15QJY4zIfh02FtxMlkWggIQVv7eKOXurbrCEUGEFDXxt454fJpp7Fw5W804Lvv006UfAWAJJ'
 STRIPE_SECRET_KEY = 'sk_test_51P5ro7P69QmgNv8U4ZFvlGJ9t5qEzAmwtFsCR7tilDfXR0jYJRcobUgHPWUdCQCGkClOlWwO3Vx8kMTCM7tdvEWn00nAe4Goqz'
+
+
+CELERY_BROKER_URL = 'redis://127.0.0.1:6379' 
+CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379'
+
+CELERY_BEAT_SCHEDULE = {
+    'automatic_payment': {
+        'task': 'gamia.tasks.PayForEachGamia',
+        # 'schedule': timedelta(minutes=1).total_seconds(), # for testing
+        'schedule': timedelta(hours=24).total_seconds(),
+    },
+    'users_trans' : {
+        'task' : 'gamia.tasks.Gamia_Users_Transations',
+        # 'schedule': timedelta(minutes=1).total_seconds() # for testing
+        'schedule': timedelta(hours=24).total_seconds(),
+    }
+}
+
+"""
+Running Celery and Celery Beat Commands : 
+    -> celery -A backend worker --loglevel=info --pool=solo
+    -> celery -A backend beat --loglevel=info 
+"""
