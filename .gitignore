@@ -3,3 +3,4 @@ migrations
 __pycache__
 media/user-pics/*
 celerybeat-schedule.*
+.env

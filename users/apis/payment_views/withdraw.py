@@ -10,7 +10,7 @@ class WithdrawView(APIView) :
     def post(self, request,**kwargs) :
         user:User = request.user
         amount = request.data.get('amount',0)
-        amount = float(amount)
+        amount = int(amount)
 
         if amount > user.balance or user.balance == 0 :
             return Response({
