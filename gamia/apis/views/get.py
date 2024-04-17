@@ -15,7 +15,7 @@ class GetAllUserGamia (APIView) :
                 'id' : str(i.gamia.id),
                 'title' : i.gamia.title,
                 'start_at' : i.gamia.started_at,
-                'end_at' : i.gamia.started_at,
+                'end_at' : i.gamia.end_at,
             } 
             for i in GamiaUser.objects.filter(user=user)
         ]
@@ -50,7 +50,6 @@ class GetGamia (APIView) :
                 gm.save()
 
                 if TotalGamiaUsers + 1 == gamia.max_users_count :
-                    print('start celery task') 
                     SetMembersRecivedAtDates.delay(gamia_id)
 
             else:
@@ -58,10 +57,11 @@ class GetGamia (APIView) :
                     'message' : "gamia arrived to max users"
                 },status=status.HTTP_400_BAD_REQUEST)
         
+
         data = {
             'gamia' : {
                 'title' : gamia.title,
-                'members_count': TotalGamiaUsers,
+                'members_count': gamia.max_users_count,
                 'every_days_count' : gamia.pay_every_days,
                 'price_per_user' : gamia.price_per_user,
                 'total_money_per_user' : gamia.total,
@@ -69,7 +69,8 @@ class GetGamia (APIView) :
                 'start_at' : gamia.started_at,
                 'end_at' : gamia.end_at,
             },
-            'members' : GamiaUserSerializer(GamiaMembers,many=True).data
+            'members' : GamiaUserSerializer(GamiaMembers,many=True).data,
+            'current_members_count' : TotalGamiaUsers,
         }
 
         return Response(data,status=status.HTTP_200_OK)

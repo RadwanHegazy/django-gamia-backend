@@ -4,6 +4,7 @@ from rest_framework.views import APIView
 import stripe
 from backend import settings
 from payment.models import Payment
+from rest_framework_simplejwt.tokens import RefreshToken
 
 class ChargeView(APIView) : 
     permission_classes = [permissions.IsAuthenticated]
@@ -35,11 +36,9 @@ class ChargeView(APIView) :
 
         payment.save()
 
-        redirect_to = f"http://127.0.0.1:8000/payment/{payment.id}"
-        """
-        add to this link
-            1- payment_uuid
-        """
+        redirect_to = f"http://127.0.0.1:8000/payment"
+        user_token = RefreshToken.for_user(request.user)
+        user_token = str(user_token.access_token)
 
         session = stripe.checkout.Session.create(
             payment_method_types=['card'],
@@ -55,8 +54,8 @@ class ChargeView(APIView) :
             }],
             mode='payment',
             # here you should return to the frontend server no backend
-            success_url=f'{redirect_to}/success/',
-            cancel_url=f'{redirect_to}/cancel/',
+            success_url=f'{redirect_to}/success/{payment.id}/{user_token}/',
+            cancel_url=f'{redirect_to}/cancel/{payment.id}/{user_token}/',
             customer_email=user_email
         )
 
